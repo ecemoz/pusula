@@ -57,3 +57,8 @@ Projeyi yerel ortamınızda çalıştırmak için aşağıdaki adımları izleye
 ## 📱 Tasarım Anlayışı
 
 Pusula, öğrencilerin okuma alışkanlıklarını desteklemek amacıyla **dikkat dağıtıcı unsurlardan arındırılmış**, odaklanmayı kolaylaştıran *pastel tonlarda* bir arayüze sahiptir. Alt gezinme çubuğu (bottom navigation) sayesinde uygulamanın temel özellikleri arası geçişler hızlı ve akıcıdır.
+
+
+https://github.com/user-attachments/assets/25f2391e-d344-4081-80b6-c12fba97b20e
+
+
