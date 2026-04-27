@@ -12,18 +12,53 @@ class ReadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final readingProvider = context.watch<ReadingProvider>();
     final appState = context.watch<AppState>();
-    
+
     final content = readingProvider.content;
     final paragraphs = content.paragraphs;
     final fontSizeStr = appState.settings?.fontSize ?? 'medium';
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Okuma'),
+        title: Text('Okuma • ${content.title}'),
         centerTitle: true,
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(LucideIcons.chevronLeft),
+                      onPressed: () => readingProvider.previousPage(),
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Sayfa ${readingProvider.currentPageIndex + 1}/${readingProvider.pageCount}',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(LucideIcons.chevronRight),
+                      onPressed: () => readingProvider.nextPage(),
+                    ),
+                    const SizedBox(width: 8),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        readingProvider.playCurrentPage();
+                      },
+                      icon: const Icon(LucideIcons.volume2, size: 18),
+                      label: const Text('Sayfayı Seslendir'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(16.0),
@@ -34,7 +69,9 @@ class ReadingScreen extends StatelessWidget {
                   child: ParagraphCard(
                     text: paragraphs[index],
                     isActive: index == readingProvider.currentParagraphIndex,
-                    isPlaying: readingProvider.isPlaying && index == readingProvider.currentParagraphIndex,
+                    isPlaying:
+                        readingProvider.isPlaying &&
+                        index == readingProvider.currentParagraphIndex,
                     fontSizeStr: fontSizeStr,
                   ),
                 );
@@ -42,7 +79,10 @@ class ReadingScreen extends StatelessWidget {
             ),
           ),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+            padding: const EdgeInsets.symmetric(
+              vertical: 16.0,
+              horizontal: 24.0,
+            ),
             decoration: BoxDecoration(
               color: Colors.white,
               boxShadow: [
@@ -70,7 +110,9 @@ class ReadingScreen extends StatelessWidget {
                   },
                   backgroundColor: Theme.of(context).primaryColor,
                   child: Icon(
-                    readingProvider.isPlaying ? LucideIcons.pause : LucideIcons.play,
+                    readingProvider.isPlaying
+                        ? LucideIcons.pause
+                        : LucideIcons.play,
                     size: 30,
                     color: Colors.white,
                   ),

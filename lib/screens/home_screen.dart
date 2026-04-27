@@ -9,7 +9,7 @@ import '../widgets/action_card.dart';
 
 class HomeScreen extends StatelessWidget {
   final Function(int) onNavigate;
-  
+
   const HomeScreen({Key? key, required this.onNavigate}) : super(key: key);
 
   void _showSummaryModal(BuildContext context, ReadingProvider provider) {
@@ -23,7 +23,7 @@ class HomeScreen extends StatelessWidget {
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: const Text('Tamam'),
-          )
+          ),
         ],
       ),
     );
@@ -34,13 +34,15 @@ class HomeScreen extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Mola Zamanı ☕'),
-        content: Text('Şimdi $breakMinutes dakikalık kısa bir mola verme zamanı. Gözlerini dinlendir ve derin nefes al.'),
+        content: Text(
+          'Şimdi $breakMinutes dakikalık kısa bir mola verme zamanı. Gözlerini dinlendir ve derin nefes al.',
+        ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
             child: const Text('Molayı Bitir'),
-          )
+          ),
         ],
       ),
     );
@@ -50,9 +52,11 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = context.watch<AppState>();
     final readingProvider = context.read<ReadingProvider>();
-    
+
     final settings = appState.settings;
-    if (settings == null) return const Center(child: CircularProgressIndicator());
+    if (settings == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -82,12 +86,31 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             ActionCard(
+              title: 'Yeni içerik çek (Kütüphaneye ekle)',
+              icon: Icons.download_rounded,
+              color: AppTheme.greenColor,
+              onTap: () async {
+                final pulledContent = await readingProvider.pullNewContent();
+                if (!context.mounted) {
+                  return;
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      '"${pulledContent.title}" kütüphaneye eklendi.',
+                    ),
+                  ),
+                );
+                onNavigate(1);
+              },
+            ),
+            ActionCard(
               title: 'Metni oku',
               icon: LucideIcons.volume2,
               color: AppTheme.primaryColor,
               onTap: () {
                 readingProvider.play();
-                onNavigate(1);
+                onNavigate(2);
               },
             ),
             ActionCard(
@@ -107,7 +130,7 @@ class HomeScreen extends StatelessWidget {
               color: AppTheme.lightBlueColor,
               onTap: () {
                 readingProvider.play();
-                onNavigate(1);
+                onNavigate(2);
               },
             ),
             ActionCard(
@@ -120,13 +143,14 @@ class HomeScreen extends StatelessWidget {
               title: 'Devam et',
               icon: LucideIcons.playCircle,
               color: AppTheme.greenColor,
-              onTap: () => onNavigate(1),
+              onTap: () => onNavigate(2),
             ),
             ActionCard(
               title: 'Mola ver',
               icon: LucideIcons.coffee,
               color: AppTheme.yellowColor,
-              onTap: () => _showBreakModal(context, settings.breakDurationMinutes),
+              onTap: () =>
+                  _showBreakModal(context, settings.breakDurationMinutes),
             ),
             const SizedBox(height: 24),
             Row(

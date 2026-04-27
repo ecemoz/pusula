@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'home_screen.dart';
+import 'library_screen.dart';
 import 'reading_screen.dart';
 import 'progress_screen.dart';
 import 'profile_screen.dart';
@@ -25,6 +26,7 @@ class _MainShellState extends State<MainShell> {
   Widget build(BuildContext context) {
     final List<Widget> screens = [
       HomeScreen(onNavigate: _onNavigate),
+      LibraryScreen(onNavigate: _onNavigate),
       const ReadingScreen(),
       const ProgressScreen(),
       const ProfileScreen(),
@@ -39,6 +41,10 @@ class _MainShellState extends State<MainShell> {
           BottomNavigationBarItem(
             icon: Icon(LucideIcons.home),
             label: 'Ana Sayfa',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.library_books_outlined),
+            label: 'Kütüphane',
           ),
           BottomNavigationBarItem(
             icon: Icon(LucideIcons.bookOpen),
